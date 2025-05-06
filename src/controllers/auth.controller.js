@@ -37,10 +37,9 @@ export const login=async(req,res)=>{
             return res.status(400).json({message:'Invalid Credential'})
         }
 
-        // const otp=Math.floor(100000+Math.random()*900000).toString()
         const otp=genrateOtp()
         user.otp=otp
-        user.otpExpire=Date.now()+10*60*1000 //10minutes
+        user.otpExpire=Date.now()+10*60*1000 
      
         await user.save()
 
@@ -70,13 +69,13 @@ export const verifyOTP=async(req,res)=>{
         res.cookie('refershToken',refreshToken,{
             httpOnly:true,
             secure:false,
-            sameSite:'strict',
+            sameSite:'None',
             maxAge:7 * 24 * 60 * 60 * 1000
         })
         res.cookie('accessToken',accessToken,{
             httpOnly:true,
             secure:false,
-            sameSite:'strict',
+            sameSite:'None',
             maxAge:1 * 24 * 60 * 60 * 1000
         })
 
