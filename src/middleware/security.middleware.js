@@ -10,6 +10,10 @@ const limiter=rateLimit({
 
 export const applySecurityMiddleware=(app)=>{
     app.use(helmet())
-    app.use(cors({ origin: true, credentials: true }));
+    app.use(cors({
+        origin: 'http://localhost:5173', 
+        credentials: true, 
+      }));
+      
     app.use(limiter);
 }

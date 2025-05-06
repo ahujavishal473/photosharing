@@ -66,12 +66,13 @@ export const verifyOTP=async(req,res)=>{
 
         user.refreshToken=refreshToken
         await user.save()
-        res.cookie('refershToken',refreshToken,{
-            httpOnly:true,
-            secure:false,
-            sameSite:'None',
-            maxAge:7 * 24 * 60 * 60 * 1000
-        })
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'None',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+          });
+          
         res.cookie('accessToken',accessToken,{
             httpOnly:true,
             secure:false,
