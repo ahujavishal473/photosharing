@@ -67,20 +67,20 @@ export const verifyOTP=async(req,res)=>{
         user.refreshToken=refreshToken
         await user.save()
 // Determine if the request is from localhost
-const isLocalhost = req.headers.origin?.includes('localhost');
+
 
 // Set cookies dynamically
 res.cookie('refreshToken', refreshToken, {
   httpOnly: true,
-  secure: !isLocalhost, // false for localhost, true for production
-  sameSite: isLocalhost ? 'Lax' : 'None', // Lax for localhost, None for production
+  secure: true, // false for localhost, true for production
+  sameSite: 'None', // Lax for localhost, None for production
   maxAge: 7 * 24 * 60 * 60 * 1000,
 });
 
 res.cookie('accessToken', accessToken, {
   httpOnly: true,
-  secure: !isLocalhost, // false for localhost, true for production
-  sameSite: isLocalhost ? 'Lax' : 'None',
+  secure: true, // false for localhost, true for production
+  sameSite: 'None',
   maxAge: 24 * 60 * 60 * 1000,
 });
 
@@ -107,8 +107,8 @@ export const refreshAccessToken=async(req,res)=>{
         const accessToken=genrateAccessToken(user._id)
         res.cookie('accessToken', accessToken, {
             httpOnly: true,
-            sameSite: 'strict',
-            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'None',
+            secure: true,
             maxAge: 15 * 60 * 1000,
           });
         res.status(200).json({accessToken})
