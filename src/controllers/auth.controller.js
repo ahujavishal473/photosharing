@@ -66,19 +66,23 @@ export const verifyOTP=async(req,res)=>{
 
         user.refreshToken=refreshToken
         await user.save()
-        res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: false,
-            sameSite: 'None',
-            maxAge: 7 * 24 * 60 * 60 * 1000,
-          });
-          
-        res.cookie('accessToken',accessToken,{
-            httpOnly:true,
-            secure:false,
-            sameSite:'None',
-            maxAge:1 * 24 * 60 * 60 * 1000
-        })
+// Determine if the request is from localhost
+const isLocalhost = req.headers.origin?.includes('localhost');
+
+// Set cookies dynamically
+res.cookie('refreshToken', refreshToken, {
+  httpOnly: true,
+  secure: !isLocalhost, // false for localhost, true for production
+  sameSite: isLocalhost ? 'Lax' : 'None', // Lax for localhost, None for production
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
+
+res.cookie('accessToken', accessToken, {
+  httpOnly: true,
+  secure: !isLocalhost, // false for localhost, true for production
+  sameSite: isLocalhost ? 'Lax' : 'None',
+  maxAge: 24 * 60 * 60 * 1000,
+});
 
         res.status(201).json({message:"OTP verifed and Login Successful "})
     }
