@@ -19,7 +19,7 @@ export const register=async (req,res)=>{
         res.status(201).json({message:'User created Successfully'})
     }
     catch(err){
-        console.log("Registration error:",err)
+        return res.status(500).json({message:err})
     }
 }
 
@@ -49,7 +49,7 @@ export const login=async(req,res)=>{
 
     } 
     catch (err) {
-        console.log("Login Error",err)
+        res.status(500).json({message:err})
     }
 }
 
@@ -83,7 +83,7 @@ export const verifyOTP=async(req,res)=>{
         res.status(201).json({message:"OTP verifed and Login Successful "})
     }
     catch(err){
-        console.log("OTP verification error:",err)
+       res.status(500).json({message:err})
     }
 }
 
