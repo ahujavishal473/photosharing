@@ -4,11 +4,7 @@ import { User } from '../model/user.model.js';
 export const authenticate = async (req, res, next) => {
   try {
     // Get token from either cookies or Authorization header
-    const token =
-      req.cookies?.accessToken ||
-      req.headers.authorization?.split(' ')[0] === 'Bearer'
-        ? req.headers.authorization.split(' ')[1]
-        : null;
+    const token =req.cookies?.accessToken 
 
     if (!token) {
       return res.status(401).json({ message: 'No token, authorization denied' });
