@@ -1,6 +1,6 @@
 import { Group } from "../model/group.model.js";
 import mongoose from "mongoose";
-
+import { genrateOtp } from "../utils/genrateOtp.js";
 
 export const createGroup=async (req,res)=>{
     try {
@@ -91,8 +91,8 @@ export const getUserGroup=async(req,res)=>{
     try{
 
         const userId=req.user.id;
-
-        const group=await Group.find({members:userId}).populate('owner','name email')
+        
+        const group=await Group.find({'members.user':userId}).populate('owner','name email')
         if(!group){
             return res.json({message:'You not Joined in Group'})
         }
