@@ -2,25 +2,33 @@ import { Group } from "../model/group.model.js";
 import mongoose from "mongoose";
 import { genrateOtp } from "../utils/genrateOtp.js";
 
-export const createGroup=async (req,res)=>{
-    try {
-        const {name}=req.body
-        const ownerId=req.user.id;
-        let code
-        let codeExists=true;
-        while(codeExists){
-            code=genrateOtp()
-            const existing=await Group.findOne({code})
-            if(!existing) codeExists=false
-        }
+export const createGroup = async (req, res) => {
+  try {
+      const { name } = req.body;
+      const ownerId = req.user.id;
 
-        const group=await Group.create({name,code,owner:ownerId,members:[ownerId]})
+      let code;
+      let codeExists = true;
+      while (codeExists) {
+          code = genrateOtp();
+          const existing = await Group.findOne({ code });
+          if (!existing) codeExists = false;
+      }
 
-        res.status(201).json({message:'Goup Created',group})
-    } catch (error) {
-        res.status(500).json({message:error.message})
-    }
-}
+      // Convert the owner ID to an ObjectId
+      const group = await Group.create({
+          name,
+          code,
+          owner: mongoose.Types.ObjectId(ownerId),
+          members: [mongoose.Types.ObjectId(ownerId)],  // Fix: Use ObjectId
+      });
+
+      res.status(201).json({ message: 'Group Created', group });
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
+
 
 export const joinGroup=async(req,res)=>{
     try{
