@@ -106,7 +106,7 @@ export const getUserGroup=async(req,res)=>{
         if(!group){
             return res.json({message:'You not Joined in Group'})
         }
-        res.status(200).json({id:group._id},{group})
+        res.status(200).json({group})
     }
     catch(err){
         res.status(500).json({message:err.message})
