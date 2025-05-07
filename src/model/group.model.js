@@ -1,3 +1,4 @@
+import { required } from "joi";
 import mongoose from "mongoose";
 const groupSchema=new mongoose.Schema(
     {
@@ -17,16 +18,18 @@ const groupSchema=new mongoose.Schema(
         },
         members:[
             {
-                type:mongoose.Schema.Types.ObjectId,
-                ref:'User'
+                user: {
+                  type: mongoose.Schema.Types.ObjectId,
+                  ref: "User",
+                  required: true,
+                },
+                allowed: {
+                  type: Boolean,
+                  default: false,  // Default to disallowed
+                },
             }
         ],
-        allowUploads: [
-            {
-            user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-            allowed: { type: Boolean, default: false }
-          }
-        ]
+
     },
     {
         timestamps:true

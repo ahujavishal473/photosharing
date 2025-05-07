@@ -54,7 +54,7 @@ export const setUploadPermission = async (req, res) => {
       const ownerId = req.user.id;
   
   
-      const isAllowed = allowed === "true" || allowed === true;
+      const isAllowed = allowed === 'true'? true:false;
   
       if (!mongoose.Types.ObjectId.isValid(userId)) {
         return res.status(400).json({ message: 'Invalid user ID' });
@@ -69,24 +69,16 @@ export const setUploadPermission = async (req, res) => {
         return res.status(403).json({ message: 'Only owner can set permissions' });
       }
   
-      const userIdObj = new mongoose.Types.ObjectId(userId);
-  
-      // 🧹 Clean any invalid upload permission entries before proceeding
-      group.allowUploads = group.allowUploads.filter(p => p.user && mongoose.Types.ObjectId.isValid(p.user));
-  
-      const existingPermission = group.allowUploads.find(
-        (p) => p.user.toString() === userIdObj.toString()
+      const member = group.members.find(
+        (m) => m.user.toString() === userId
       );
   
-      if (existingPermission) {
-        existingPermission.allowed = isAllowed;
-      } else {
-        group.allowUploads.push({
-          user: userIdObj,
-          allowed: isAllowed
-        });
+      // 🧹 Clean any invalid upload permission entries before proceeding
+      
+      if (!member) {
+        return res.status(404).json({ message: "Member not found in group" });
       }
-  
+      member.allowed = allowed;
       await group.save();
   
       res.status(200).json({ message: 'Permission Updated' });
@@ -138,7 +130,8 @@ export const groupDetail = async (req, res) => {
           name: group.name,
           code: group.code,
           owner: group.owner,
-          members: group.members, // Directly use populated members
+          members: group.members,
+         
         },
       });
     } catch (error) {

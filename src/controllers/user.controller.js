@@ -7,6 +7,7 @@ export const getStorageUsage=async(req,res)=>{
         const remainingMB=(500-usedMB).toFixed(2)
 
         res.status(200).json({
+            user:user,
             used: `${usedMB} MB`,
             remaining: `${remainingMB} MB`,
             percent: ((usedMB / 500) * 100).toFixed(2),
