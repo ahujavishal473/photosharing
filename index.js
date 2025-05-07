@@ -14,6 +14,10 @@ const PORT=process.env.PORT || 5000
 
 connection()
 const app=express()
+    app.use(cors({
+        origin: 'http://localhost:5173', 
+        credentials: true, 
+      }));
 applySecurityMiddleware(app)
 app.use(express.json())
 app.use(cookieParser())
