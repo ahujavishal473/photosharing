@@ -1,8 +1,6 @@
 import { Group } from "../model/group.model.js";
-
 import mongoose from "mongoose";
-import { configDotenv } from "dotenv";
-import { genrateOtp } from "../utils/genrateOtp.js";
+
 
 export const createGroup=async (req,res)=>{
     try {
